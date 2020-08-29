@@ -18,23 +18,23 @@ public class RollerAgent : Agent
     {
         if (this.transform.localPosition.y < 0)
         {
-            //If the agent fell, zero it's momentum
+            // If the Agent fell, zero its momentum
             this.rBody.angularVelocity = Vector3.zero;
             this.rBody.velocity = Vector3.zero;
-            this.transform.localPosition = new Vector3(0,0.5f,0);
+            this.transform.localPosition = new Vector3( 0, 0.5f, 0);
         }
-        
+
         // Move the target to a new spot
-        Target.localPosition = new Vector3(Random.value*8-4, 0.5f, Random.value*8-4);
+        Target.localPosition = new Vector3(Random.value * 8 - 4, 0.5f, Random.value * 8 - 4);
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        //Target and agent positions
+        // Target and Agent positions
         sensor.AddObservation(Target.localPosition);
         sensor.AddObservation(this.transform.localPosition);
-        
-        // Agent velocity 
+
+        // Agent velocity
         sensor.AddObservation(rBody.velocity.x);
         sensor.AddObservation(rBody.velocity.z);
     }
@@ -46,6 +46,7 @@ public class RollerAgent : Agent
         Vector3 controlSignal = Vector3.zero;
         controlSignal.x = vectorAction[0];
         controlSignal.z = vectorAction[1];
+        rBody.AddForce(controlSignal * forceMultiplier);
         
         // Rewards 
         float distanceToTarget = Vector3.Distance(this.transform.localPosition, Target.localPosition);
